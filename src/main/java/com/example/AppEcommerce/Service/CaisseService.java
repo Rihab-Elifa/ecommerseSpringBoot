@@ -43,6 +43,7 @@ public class CaisseService implements CaisseServiceImp {
     public void sendCaisseNotif(String id) throws FirebaseMessagingException {
         Commander caisse = caisseRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("caisse not found with ID"+ id));
+
         notificationService.sendPushNotification(id);
         notificationService.sendDeliveriesPushNotificationLocal(caisse.getId());
     }
@@ -119,7 +120,7 @@ public class CaisseService implements CaisseServiceImp {
     }
     //today sales
     @Override
-    public RevenueDate todaysales() {
+    public int todaysales() {
         List<Commander> c= caisseRepository.findAll();
         int revenue=0;
         int prix=0;
@@ -137,14 +138,14 @@ public class CaisseService implements CaisseServiceImp {
 
 
                     }
-                    revenueDate = new RevenueDate(revenue, LocalDate.now());
+
                 }
             }
-            else {return new RevenueDate(0, LocalDate.now());}
+            else {return 0;}
         }
 
 
-        return revenueDate;
+        return revenue;
     }
     //total sales
     @Override
@@ -180,9 +181,11 @@ public class CaisseService implements CaisseServiceImp {
 
 
                 for (RevenueDate revenueDate : u.getRevenueDates()) {
-                    if (revenueDate.getDate().equals(LocalDate.now())) {
-                        revenue += revenueDate.getRevenue();
-                        i++;
+                    if  (revenueDate.getDate()!=null) {
+                        if (revenueDate.getDate().equals(LocalDate.now())) {
+                            revenue += revenueDate.getRevenue();
+                            i++;
+                        }
                     }
                 }
 
@@ -199,10 +202,12 @@ public class CaisseService implements CaisseServiceImp {
         int i=0;
         for (User u : users) {
             if (u.getRole()== Role.DELIVERY) {
-                for (RevenueDate revenueDate : u.getRevenueDates()) {
+                if (u.getRevenueDates() != null) {
+                    for (RevenueDate revenueDate : u.getRevenueDates()) {
                         i++;
-                }
+                    }
 
+                }
             }
 
         }
@@ -215,12 +220,14 @@ public class CaisseService implements CaisseServiceImp {
         int i=0;
         List<ArticleCaisse> articleCaisses = null;
         for (Commander cc: c) {
-            if (cc.getStatus() == Status.DELIVERED && cc.getDate().equals(LocalDate.now())) {
+            if (cc.getDate() != null) {
+                if (cc.getStatus() == Status.DELIVERED && cc.getDate().equals(LocalDate.now())) {
 
-                for (ArticleCaisse article : cc.getArticles()) {
+                    for (ArticleCaisse article : cc.getArticles()) {
 
-                     i  = i + article.getQuantity();
+                        i = i + article.getQuantity();
 
+                    }
                 }
             }
         }
@@ -261,7 +268,7 @@ public class CaisseService implements CaisseServiceImp {
      ///vendeur
     //today sales
     @Override
-    public RevenueDate vendeurtodaysales(String id) {
+    public int vendeurtodaysales(String id) {
     List<Commander> c= findByVender(id);
     int revenue=0;
     int prix=0;
@@ -279,25 +286,26 @@ public class CaisseService implements CaisseServiceImp {
 
 
                 }
-                revenueDate = new RevenueDate(revenue, LocalDate.now());
+
             }
         }
-        else {return new RevenueDate(0, LocalDate.now());}
+
     }
 
 
-    return revenueDate;
+    return   revenue ;
 }
 //vendeur total sales
 @Override
-public RevenueDate vendeurtotalsales(String id) {
+public int vendeurtotalsales(String id) {
     List<Commander> c= findByVender(id);
+
     int revenue=0;
     int prix=0;
     RevenueDate revenueDate = null;
     List<ArticleCaisse> articleCaisses = null;
     for (Commander cc: c) {
-        if (cc.getDate() != null) {
+
             if (cc.getStatus() == Status.DELIVERED ) {
 
                 for (ArticleCaisse article : cc.getArticles()) {
@@ -308,29 +316,67 @@ public RevenueDate vendeurtotalsales(String id) {
 
 
                 }
-                revenueDate = new RevenueDate(revenue, LocalDate.now());
+
             }
-        }
-        else {return new RevenueDate(0, LocalDate.now());}
+
     }
 
 
-    return revenueDate;
+    return revenue;
 }
+//today revenu du venduer
+@Override
+public double todayRevenueV(String id) {
+    List<Commander> c= caisseRepository.findByidVendor(id);
+    int revenue=0;
+    int prix=0;
+    int i=0;
+
+    List<ArticleCaisse> articleCaisses = null;
+    for (Commander cc: c) {
+        if (cc.getDate() != null) {
+            if (cc.getStatus() == Status.DELIVERED && cc.getDate().equals(LocalDate.now())) {
+
+                for (ArticleCaisse article : cc.getArticles()) {
+                    prix = Integer.parseInt(article.getPrix());
+                    revenue += (prix * article.getQuantity());
+                    i +=article.getQuantity();
+
+
+                }
+
+            }
+        }
+        else {return 0;}
+    }
+    return revenue-(i*1000);
+}
+
+
 //total revenu vendeur
 
     @Override
     public double totalRevenue(String id) {
-        User user = userRepository.findById(id).orElseThrow();
-        RevenueDate todayRevenue = null;
-        double d=0;
-        List<RevenueDate> revenues = user.getRevenueDates();
-        for (RevenueDate revenueDate : revenues) {
+        List<Commander> c= caisseRepository.findByidVendor(id);
+        int revenue=0;
+        int prix=0;
+        int i=0;
 
-                d+=revenueDate.getRevenue();
+        List<ArticleCaisse> articleCaisses = null;
+        for (Commander cc: c) {
+                if (cc.getStatus() == Status.DELIVERED ) {
+                    for (ArticleCaisse article : cc.getArticles()) {
+                        prix = Integer.parseInt(article.getPrix());
+                        revenue += (prix * article.getQuantity());
+                         i +=article.getQuantity();
+
+
+                    }
+
+                }
 
         }
-        return d;
+        return revenue-(i*1000);
     }
 
 

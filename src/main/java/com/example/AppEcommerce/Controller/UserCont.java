@@ -89,11 +89,13 @@ public class UserCont {
     public List<RevenueDate> monthRevenue(@PathVariable("id") String id) {
         return userServicesI.monthRevenue(id);
     }
+    //work successfuly for admin
     @GetMapping("/todaySales")
-    public RevenueDate todaySles(){
+    public int todaySles(){
         return caisseService.todaysales();
     }
 
+    // for admin
     @GetMapping("/totalSales")
     public Double totalSales(){
         return caisseService.totalsales();
@@ -105,13 +107,17 @@ public class UserCont {
         return caisseService.adminRevenu();
     }
 
+    //total revenu
     @GetMapping("/AdminTotalRevenu")
     public Double AdminRevenuetotal(){return caisseService.AdmeinRedvenuTotal();}
     //today sales vendeur
     @GetMapping("/VendeurSalesToday/{id}")
-    public RevenueDate vendeurS(@PathVariable String id){return caisseService.vendeurtodaysales(id);}
+    public int vendeurS(@PathVariable String id){return caisseService.vendeurtodaysales(id);}
     @GetMapping("/VendeurSalesTotal/{id}")
-    public RevenueDate vendeurTotalSales(@PathVariable String id){return caisseService.vendeurtotalsales(id);}
+    public int vendeurTotalSales(@PathVariable String id){return caisseService.vendeurtotalsales(id);}
+    @GetMapping("/VendeurTodayR/{id}")
+    public double vendeurTRevenu(@PathVariable String id){return caisseService.todayRevenueV(id);}
+
     @GetMapping("/VendeurTotalRevenu/{id}")
     public double vendeurRevenuT(@PathVariable String id){return caisseService.totalRevenue(id);}
 

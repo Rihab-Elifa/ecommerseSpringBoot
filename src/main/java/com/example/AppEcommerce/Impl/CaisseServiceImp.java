@@ -38,7 +38,7 @@ public interface CaisseServiceImp {
     void UpdateSolde(String id);
 
     //today sales
-    RevenueDate todaysales();
+    int todaysales();
 
     //total sales
     Double totalsales();
@@ -64,12 +64,14 @@ public interface CaisseServiceImp {
 
     ///vendeur
    //today sales
-    RevenueDate vendeurtodaysales(String id);
+ int vendeurtodaysales(String id);
 
     //vendeur total sales
-    RevenueDate vendeurtotalsales(String id);
+  int vendeurtotalsales(String id);
 
 
+    //today revenu du venduer
+    double todayRevenueV(String id);
 
     double totalRevenue(String id);
 }
