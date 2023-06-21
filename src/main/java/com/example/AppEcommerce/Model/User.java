@@ -28,6 +28,7 @@ public class User {
     private String firstName;
     private String lastName;
     private long phone;
+    private String ville;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -92,6 +93,17 @@ public class User {
         this.longitude = longitude;
 
         this.latitude = latitude;
+
+    }
+
+    public User(String email, String password, Role role, String firstName, String lastName, long phone,String ville) {
+        this.email=email;
+        this.password=password;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.role=role;
+        this.ville=ville;
+        this.phone=phone;
 
     }
 

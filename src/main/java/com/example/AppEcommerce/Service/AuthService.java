@@ -79,6 +79,20 @@ public class AuthService implements AuthServiceImp {
     }
 
     @Override
+    public ResponseEntity<?> registerSousAdmin(SignUpSousAdmin signUpAdmin){
+        if (userRepository.existsByEmail(signUpAdmin.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error:email is already taken!"));
+        }
+
+        User user =new User( signUpAdmin.getEmail(),encoder.encode(signUpAdmin.getPassword()),Role.SOUS_ADMIN,signUpAdmin.getFirstName(), signUpAdmin.getLastName(), signUpAdmin.getPhone(),signUpAdmin.getVille());
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse(" Sous_Admin registered successfully!"));
+
+    }
+
+    @Override
     public ResponseEntity<?> login(LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));

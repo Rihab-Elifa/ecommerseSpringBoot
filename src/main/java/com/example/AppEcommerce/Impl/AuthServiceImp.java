@@ -1,10 +1,7 @@
 package com.example.AppEcommerce.Impl;
 
 
-import com.example.AppEcommerce.Dto.LoginRequest;
-import com.example.AppEcommerce.Dto.SignUpAdmin;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
+import com.example.AppEcommerce.Dto.*;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthServiceImp {
@@ -13,6 +10,7 @@ public interface AuthServiceImp {
     ResponseEntity<?> registerUser(SignUpUser signUpUser);
 
     ResponseEntity<?> registerDelivery(SignUpDelivery signUpDelivery);
+    ResponseEntity<?> registerSousAdmin(SignUpSousAdmin signUpAdmin);
 
     ResponseEntity<?> login(LoginRequest loginRequest);
 }

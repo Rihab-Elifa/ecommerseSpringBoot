@@ -1,9 +1,6 @@
 package com.example.AppEcommerce.Controller;
 
-import com.example.AppEcommerce.Dto.LoginRequest;
-import com.example.AppEcommerce.Dto.SignUpAdmin;
-import com.example.AppEcommerce.Dto.SignUpDelivery;
-import com.example.AppEcommerce.Dto.SignUpUser;
+import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Model.User;
 import com.example.AppEcommerce.Service.AuthService;
 import com.example.AppEcommerce.Service.UserServicesI;
@@ -42,6 +39,10 @@ public class AuthController {
    @PostMapping("/registerDelivery")
     public ResponseEntity<?> registerDelivery(@Valid @RequestBody SignUpDelivery signUpDelivery){
         return authService.registerDelivery(signUpDelivery);
+    }
+    @PostMapping("/SousAdmin")
+    public ResponseEntity<?> SousAd(@Valid @RequestBody SignUpSousAdmin signUpDelivery){
+        return authService.registerSousAdmin(signUpDelivery);
     }
 
     //liste livreur
