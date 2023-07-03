@@ -34,6 +34,15 @@ public interface CaisseServiceImp {
     //set sold client
     void UpdateSolde(String id, int i);
 
+    //update solde pour sous admin
+    void UpdateSoldeSousAdmin(String id, String id2, int i);
+
+    //update solde pour sous admin (carger le page)
+    void PageUpdateSolde(String id, String id2, int i);
+
+    //reset sous admin
+    void Reset(String id);
+
     //update etat
     void UpdateSolde(String id);
 

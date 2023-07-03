@@ -44,6 +44,8 @@ public class User {
     private double longitude;
  private boolean etat;
     private double latitude;
+    private double compteurC;
+    private double t;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "imageProfile_id")
     private File imageProfile;

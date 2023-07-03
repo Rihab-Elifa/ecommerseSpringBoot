@@ -226,7 +226,7 @@ public class UserServicesI implements UserServiceImpl {
         List<User> u=userRepository.findAll();
         List<User> admin=new ArrayList<>();
         for(User uu:u){
-            if (uu.getRole()== Role.ADMIN){
+            if (uu.getRole()== Role.SOUS_ADMIN){
                 admin.add(uu);
 
             }

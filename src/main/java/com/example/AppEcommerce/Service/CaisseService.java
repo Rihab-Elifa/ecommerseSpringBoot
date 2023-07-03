@@ -111,6 +111,43 @@ public class CaisseService implements CaisseServiceImp {
         u.setSold(i+u.getSold());
         userRepository.save(u);
     }
+    //update solde pour sous admin
+    @Override
+    public void UpdateSoldeSousAdmin(String id, String id2, int i){
+        User u=userRepository.findById(id).orElseThrow();
+        User u2=userRepository.findById(id2).orElseThrow();
+        u.setSold(i+u.getSold());
+        //Pour charger tous les soldes ajouter pour le sous admin
+        u2.setCompteurC(u2.getCompteurC()+i);
+        u2.setT(u2.getT()+i*0.01);
+        userRepository.save(u);
+        userRepository.save(u2);
+
+    }
+    //update solde pour sous admin (carger le page)
+    @Override
+    public void PageUpdateSolde(String id, String id2, int i){
+        User u=userService.getUserByPage(id);
+        User u2=userRepository.findById(id2).orElseThrow();
+        if(u!=null){
+        u.setSold(i+u.getSold());
+        //Pour charger tous les soldes ajouter pour le sous admin
+        u2.setCompteurC(u2.getCompteurC()+i);
+        u2.setT(u2.getT()+i*0.01);
+        userRepository.save(u);
+        userRepository.save(u2);}
+
+    }
+    //reset sous admin
+    @Override
+    public void Reset(String id){
+        User u=userRepository.findById(id).orElseThrow();
+        u.setCompteurC(0);
+        userRepository.save(u);
+
+
+    }
+
     //update etat
     @Override
     public void UpdateSolde(String id){

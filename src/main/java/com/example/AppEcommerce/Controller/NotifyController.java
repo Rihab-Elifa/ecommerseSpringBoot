@@ -120,5 +120,20 @@ public class NotifyController {
         caisseService.UpdateSolde(id);
     }
 
+    //modifier le solde et compteur la somme de solde ajouter pour le sous admin pour le sous admin
+    @PutMapping("/UpdateSoldeSousAdmin/{id}/{id2}")
+    public void SoldesousAdmin(@PathVariable String id ,@PathVariable String id2,@RequestBody int i){
+        caisseService.UpdateSoldeSousAdmin(id,id2,i);
+    }
+    @PutMapping("/PagesSoldeSousAdmin/{id}/{id2}")
+    public void PagesSoldesousAdmin(@PathVariable String id ,@PathVariable String id2,@RequestBody int i){
+        caisseService.PageUpdateSolde(id,id2,i);
+    }
+    //reset le compteur pour le sous admin
+    @PutMapping("/Reset/{id}")
+    public void Reset(@PathVariable String id ){
+        caisseService.Reset(id);
+    }
+
     }
 
