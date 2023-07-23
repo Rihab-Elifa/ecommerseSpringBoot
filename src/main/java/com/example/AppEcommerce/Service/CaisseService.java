@@ -119,7 +119,7 @@ public class CaisseService implements CaisseServiceImp {
         u.setSold(i+u.getSold());
         //Pour charger tous les soldes ajouter pour le sous admin
         u2.setCompteurC(u2.getCompteurC()+i);
-        u2.setT(u2.getT()+i*0.01);
+        u2.setT(u2.getT()+i*0.1);
         userRepository.save(u);
         userRepository.save(u2);
 
@@ -133,7 +133,7 @@ public class CaisseService implements CaisseServiceImp {
         u.setSold(i+u.getSold());
         //Pour charger tous les soldes ajouter pour le sous admin
         u2.setCompteurC(u2.getCompteurC()+i);
-        u2.setT(u2.getT()+i*0.01);
+        u2.setT(u2.getT()+i*0.1);
         userRepository.save(u);
         userRepository.save(u2);}
 
