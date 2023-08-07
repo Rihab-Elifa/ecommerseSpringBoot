@@ -40,13 +40,14 @@ public class ArticleService  implements ArticleServiceImpl {
 
     public static final double RADIUS_OF_EARTH = 6371;
     @Override
-    public String  addArticle(String id, ArticleDto articleDto,MultipartFile image) throws IOException {
+    public ResponseEntity<String>  addArticle(String id, ArticleDto articleDto,MultipartFile image) throws IOException {
         PageVendor page =pagesRepository.findById(id).orElseThrow(null);
         File images = new File(image.getOriginalFilename(), image.getContentType(), image.getBytes());
         fileRepository.save(images);
         Article article = new Article(articleDto.getNom(), articleDto.getDescription(), articleDto.getPrix(), articleDto.getNbstock(), page,images);
         Article article1 = articleRepository.save(article);
-        return article1.getId();
+
+        return ResponseEntity.ok().body("{\"pageId\": \"" + article1.getId() + "\"}");
     }
     @Override
     public ResponseEntity<?> addImageToArticle(String id, MultipartFile file)throws IOException {

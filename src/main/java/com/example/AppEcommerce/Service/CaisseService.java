@@ -11,6 +11,7 @@ import com.example.AppEcommerce.Repository.NotificationRepository;
 import com.example.AppEcommerce.Repository.UserRepository;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,11 +34,11 @@ public class CaisseService implements CaisseServiceImp {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public String addCaisse(CommandeDto caisseDto) throws FirebaseMessagingException{
+    public ResponseEntity<String> addCaisse(CommandeDto caisseDto) throws FirebaseMessagingException{
         Commander caisse =new Commander(caisseDto.getIdSender(),caisseDto.getAddress(),caisseDto.getStreetAddress(),caisseDto.getPhone(),caisseDto.getSelectedTime(),caisseDto.getDescription(), caisseDto.getIdVendor(), caisseDto.getSubtotal(),caisseDto.getFrais(),caisseDto.getTotalPrice(),caisseDto.getArticles(), LocalDate.now());
         Commander caisse2 = caisseRepository.save(caisse);
         sendCaisseNotif(caisse2.getId());
-        return caisse2.getId();
+        return ResponseEntity.ok().body("{\"pageId\": \"" + caisse2.getId() + "\"}");
     }
     @Override
     public void sendCaisseNotif(String id) throws FirebaseMessagingException {

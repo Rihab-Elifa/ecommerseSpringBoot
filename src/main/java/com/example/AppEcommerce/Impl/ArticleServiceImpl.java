@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ArticleServiceImpl {
-    String  addArticle(String idPage, ArticleDto articleDto ,MultipartFile image) throws IOException;
+    ResponseEntity<String>  addArticle(String idPage, ArticleDto articleDto ,MultipartFile image) throws IOException;
 
     ResponseEntity<?> addImageToArticle(String id, MultipartFile file)throws IOException;
 

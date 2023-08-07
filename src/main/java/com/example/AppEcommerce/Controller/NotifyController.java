@@ -31,7 +31,7 @@ public class NotifyController {
 
     //add commmand
     @PostMapping(value="/AjoutCommande",consumes = "application/json")
-    private String commander(@RequestBody CommandeDto commande)throws FirebaseMessagingException {
+    private ResponseEntity<String>  commander(@RequestBody CommandeDto commande)throws FirebaseMessagingException {
         return caisseService.addCaisse( commande);
     }
         /*commandeRepository.save(commande);

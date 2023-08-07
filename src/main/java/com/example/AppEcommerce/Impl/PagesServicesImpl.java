@@ -7,10 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface PagesServicesImpl {
-    String  addPage(String idUser, PagesDto pagesDto, MultipartFile fileProfile, MultipartFile fileCouverture) throws IOException;
+    ResponseEntity<String>  addPage(String idUser, PagesDto pagesDto, MultipartFile fileProfile, MultipartFile fileCouverture) throws IOException;
 
 
-    String editPage(String id, PagesDto pagesDto );
+    ResponseEntity<String> editPage(String id, PagesDto pagesDto );
 
     ResponseEntity<?> editPhotoProfile(String id, MultipartFile fileProfile)throws IOException;
 

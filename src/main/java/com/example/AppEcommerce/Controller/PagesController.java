@@ -35,7 +35,7 @@ import java.util.Optional;
 
 
     @PostMapping(value="/addPage/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})//bech dakhelou des données wa m3ahom images
-    public String  addPage(@PathVariable String id , @RequestPart("page") PagesDto pagesDto, @RequestPart(name = "imageProfile", required = false) MultipartFile fileProfile, @RequestPart(name = "imageCouverture", required = false) MultipartFile fileCouverture) throws IOException {
+    public ResponseEntity<String> addPage(@PathVariable String id , @RequestPart("page") PagesDto pagesDto, @RequestPart(name = "imageProfile", required = false) MultipartFile fileProfile, @RequestPart(name = "imageCouverture", required = false) MultipartFile fileCouverture) throws IOException {
         return pagesService.addPage(id,pagesDto,fileProfile,fileCouverture);
     }
     @GetMapping(value="/findAllPages")
@@ -52,7 +52,8 @@ import java.util.Optional;
     }
     //delete and update
     @PutMapping("/editPage/{id}")
-    public String editPage(@PathVariable String id,@RequestBody PagesDto pagesDto){
+    public ResponseEntity<String>
+    editPage(@PathVariable String id,@RequestBody PagesDto pagesDto){
         return pagesService.editPage(id,pagesDto);
 
     }

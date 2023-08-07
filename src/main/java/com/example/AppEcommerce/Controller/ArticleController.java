@@ -39,12 +39,12 @@ public class ArticleController {
     @Autowired
     private UserPurchaseRepository userPurchaseRepository;
     @PostMapping(value = "/addArticle/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public String addArticle(@PathVariable String id, @RequestPart("article") ArticleDto articleDto,@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<String> addArticle(@PathVariable String id, @RequestPart("article") ArticleDto articleDto,@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         return articleService.addArticle(id, articleDto,image);
     }
 
     @PostMapping(value="/addProduit/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public String addProduit(@PathVariable String id , @RequestPart("article") ArticleDto articleDto, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<String> addProduit(@PathVariable String id , @RequestPart("article") ArticleDto articleDto, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         return articleService.addArticle(id, articleDto,image);
 
 

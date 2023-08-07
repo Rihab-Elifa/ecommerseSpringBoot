@@ -37,7 +37,7 @@ public class PagesSerivice implements PagesServicesImpl {
     ArticleRepository articleRepository;
 
     @Override
-    public String  addPage(String idUser, PagesDto pagesDto, MultipartFile fileProfile, MultipartFile fileCouverture) throws IOException {
+    public ResponseEntity<String>  addPage(String idUser, PagesDto pagesDto, MultipartFile fileProfile, MultipartFile fileCouverture) throws IOException {
         File imageProfile = new File(fileProfile.getOriginalFilename(),fileProfile.getContentType(),fileProfile.getBytes());
         File imageCouverture = new File(fileCouverture.getOriginalFilename(),fileCouverture.getContentType(),fileCouverture.getBytes());
         User user = userRepository.findById(idUser).orElseThrow(null);
@@ -45,13 +45,14 @@ public class PagesSerivice implements PagesServicesImpl {
         pagesRepository.save(pages);
         user.getPages().add(pages);
         userRepository.save(user);
-        return pages.getId();
+        return ResponseEntity.ok().body("{\"pageId\": \"" + pages.getId() + "\"}");
+
 
 
     }
 
     @Override
-    public String editPage(String id, PagesDto pagesDto ) {
+    public ResponseEntity<String> editPage(String id, PagesDto pagesDto ) {
 
 
         User user = userRepository.findById(id)
@@ -90,7 +91,8 @@ public class PagesSerivice implements PagesServicesImpl {
             }
         });
 
-        return pages1.getId();
+
+        return ResponseEntity.ok().body("{\"pageId\": \"" + pages1.getId() + "\"}");
     }
 
 

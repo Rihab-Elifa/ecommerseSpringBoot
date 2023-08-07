@@ -4,12 +4,13 @@ import com.example.AppEcommerce.Dto.CommandeDto;
 import com.example.AppEcommerce.Model.Commander;
 import com.example.AppEcommerce.Model.RevenueDate;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface CaisseServiceImp {
 
-    String addCaisse(CommandeDto caisseDto) throws FirebaseMessagingException;
+    ResponseEntity<String> addCaisse(CommandeDto caisseDto) throws FirebaseMessagingException;
 
     void sendCaisseNotif(String id) throws FirebaseMessagingException;
 
