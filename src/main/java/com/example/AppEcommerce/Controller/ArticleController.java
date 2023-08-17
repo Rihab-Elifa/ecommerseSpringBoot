@@ -4,12 +4,12 @@ package com.example.AppEcommerce.Controller;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.AppEcommerce.Dto.*;
 import com.example.AppEcommerce.Enum.Activity;
+import com.example.AppEcommerce.Enum.Status;
 import com.example.AppEcommerce.Model.*;
 
-import com.example.AppEcommerce.Repository.ArticleRepository;
-import com.example.AppEcommerce.Repository.CategoryRepository;
-import com.example.AppEcommerce.Repository.UserPurchaseRepository;
+import com.example.AppEcommerce.Repository.*;
 import com.example.AppEcommerce.Service.ArticleService;
+import com.example.AppEcommerce.Service.CaisseService;
 import com.example.AppEcommerce.Service.RatingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +38,12 @@ public class ArticleController {
     private CategoryRepository categoryRepository;
     @Autowired
     private UserPurchaseRepository userPurchaseRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommandeRepository commandeRepository;
+    @Autowired
+    private CaisseService caisseService;
     @PostMapping(value = "/addArticle/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> addArticle(@PathVariable String id, @RequestPart("article") ArticleDto articleDto,@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         return articleService.addArticle(id, articleDto,image);
@@ -143,11 +149,21 @@ public class ArticleController {
     }
 
     //get List article recommend by user
-    @GetMapping(value = "/ArticleRecommend/{id}")
-  public   void getArticleRecommend(@PathVariable String id){
+    @GetMapping(value = "/ArticleRecommend/{id}")//on change id de userpurchase par id du user directement pour chercher le historique
+  public   List<Article> getArticleRecommend(@PathVariable String id){
      RestTemplate restTemplate = new RestTemplate();
-     UserPurchase u=userPurchaseRepository.findUserById(id);
-     List<History> historique =u.getProductId();
+     //UserPurchase u=userPurchaseRepository.findUserById(id);
+     //List<History> historique =u.getProductId();
+     List<Commander> lc=caisseService.caisseListClient(id);
+     List<History> historique=new ArrayList<>();
+     for(Commander c :lc){
+         if(c.getStatus()== Status.DELIVERED){
+         c.getArticles().forEach(aa->{
+             History h =new History(aa.getId());
+          if(!(historique.contains(h)))
+             historique.add(h);
+         });
+     }}
 
      // Définissez les en-têtes de la requête
      HttpHeaders headers = new HttpHeaders();
@@ -160,6 +176,7 @@ public class ArticleController {
        Recommend myData = new Recommend(pp, historique);
 
         ObjectMapper mapper = new ObjectMapper();
+        List<Article> l=new ArrayList<>();
 
         try {
             String json = mapper.writeValueAsString(myData);
@@ -175,8 +192,16 @@ public class ArticleController {
             String responseBody = response.getBody();
             ObjectMapper objectMapper = new ObjectMapper();
             ResponceBody responseObj = objectMapper.readValue(responseBody, ResponceBody.class);
+
+            List<Article> l2=articleRepository.findAll();
             for(Products r:responseObj.getRecommendedProducts() ){
                 System.out.println(r.getName());
+                for(Article ar:l2){
+                    if (ar.getDescription().equals((r.getDescription()))&&ar.getNom().equals((r.getName()))){
+                        l.add(ar);
+                        System.out.println(ar.getNom());
+                    }
+                }
             }
             System.out.println(responseObj);
         } catch (JsonProcessingException e) {
@@ -184,7 +209,7 @@ public class ArticleController {
         }
 
 
-
+    return l;
  }
 
 

@@ -8,6 +8,7 @@ import com.example.AppEcommerce.Impl.CaisseServiceImp;
 import com.example.AppEcommerce.Model.*;
 import com.example.AppEcommerce.Repository.CommandeRepository;
 import com.example.AppEcommerce.Repository.NotificationRepository;
+import com.example.AppEcommerce.Repository.UserPurchaseRepository;
 import com.example.AppEcommerce.Repository.UserRepository;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class CaisseService implements CaisseServiceImp {
     private  UserServicesI userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserPurchaseRepository userPurchaseRepository;
     @Override
     public ResponseEntity<String> addCaisse(CommandeDto caisseDto) throws FirebaseMessagingException{
         Commander caisse =new Commander(caisseDto.getIdSender(),caisseDto.getAddress(),caisseDto.getStreetAddress(),caisseDto.getPhone(),caisseDto.getSelectedTime(),caisseDto.getDescription(), caisseDto.getIdVendor(), caisseDto.getSubtotal(),caisseDto.getFrais(),caisseDto.getTotalPrice(),caisseDto.getArticles(), LocalDate.now());
