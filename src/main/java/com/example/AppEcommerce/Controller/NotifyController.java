@@ -117,7 +117,7 @@ public class NotifyController {
     }
     @PutMapping("/Etat/{id}")
     public void Update(@PathVariable String id ){
-        caisseService.UpdateSolde(id);
+        caisseService.etat(id);
     }
 
     //modifier le solde et compteur la somme de solde ajouter pour le sous admin pour le sous admin

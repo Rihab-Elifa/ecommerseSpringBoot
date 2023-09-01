@@ -1,18 +1,24 @@
 package com.example.AppEcommerce.Dto;
 
-import com.example.AppEcommerce.Model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RatingDto {
-    @Id
+public class ratings {
     private String id;
+
     private int NumR;
-    private String a;
+
     private String u;
+
+    private String a;
+    public ratings(int numR, String a,String u) {
+        this.NumR = numR;
+        this.u = u;
+        this.a=a;
+    }
+
 }

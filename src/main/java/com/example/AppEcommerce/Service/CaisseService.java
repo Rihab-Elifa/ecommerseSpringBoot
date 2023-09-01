@@ -125,6 +125,7 @@ public class CaisseService implements CaisseServiceImp {
         u2.setCompteurC(u2.getCompteurC()+i);
         u2.setT(u2.getT()+i*0.1);
         userRepository.save(u);
+
         userRepository.save(u2);
 
     }
@@ -154,9 +155,9 @@ public class CaisseService implements CaisseServiceImp {
 
     //update etat
     @Override
-    public void UpdateSolde(String id){
+    public void etat(String id){
         User u=userRepository.findById(id).orElseThrow();
-        u.setEtat(false);
+        u.setEtat(true);
         userRepository.save(u);
     }
     //today sales

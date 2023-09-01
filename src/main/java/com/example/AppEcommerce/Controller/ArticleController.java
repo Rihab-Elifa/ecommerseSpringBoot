@@ -44,6 +44,8 @@ public class ArticleController {
     private CommandeRepository commandeRepository;
     @Autowired
     private CaisseService caisseService;
+    @Autowired
+    private RatingRepository ratingRepository;
     @PostMapping(value = "/addArticle/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> addArticle(@PathVariable String id, @RequestPart("article") ArticleDto articleDto,@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         return articleService.addArticle(id, articleDto,image);
@@ -97,7 +99,7 @@ public class ArticleController {
     //********************Rating user for article********
 
     @PostMapping(value="/addRating/{idU}/{idA}")
-    public String Rating(@PathVariable String idU,@PathVariable String idA,@RequestBody RatingDto ratingDto){
+    public String Rating(@PathVariable String idU,@PathVariable String idA,@RequestBody int ratingDto){
         return ratingService.addRating(idU,idA,ratingDto);
 
 
@@ -145,6 +147,16 @@ public class ArticleController {
             Products.add(new Products(aa.getId(),aa.getNom(),aa.getDescription(),price));
         }
         return Products;
+
+    }
+    public List<ratings> getRating(){
+        List<ratings> ratings =new ArrayList<>();
+        List<Rating> a=ratingRepository.findAll();
+        for(Rating aa:a){
+            ratings.add(new ratings(aa.getNumR(),aa.getU(),aa.getA()));
+        }
+        System.out.println(ratings);
+        return ratings;
 
     }
 
@@ -211,7 +223,65 @@ public class ArticleController {
 
     return l;
  }
+// Model-based collaborative filtering system
 
+    //get List article recommend by user
+    @GetMapping(value = "/ArticleR/{id}")
+    public   List<Article> ArticleRec(@PathVariable String id){
+        RestTemplate restTemplate = new RestTemplate();
+        //UserPurchase u=userPurchaseRepository.findUserById(id);
+        //List<History> historique =u.getProductId();
+        List<Commander> lc=caisseService.caisseListClient(id);
+        List<History> hp=new ArrayList<>();
+        for(Commander c :lc){
+            if(c.getStatus()== Status.DELIVERED){
+                c.getArticles().forEach(aa->{
+                    History h =new History(aa.getId());
+                    if(!(hp.contains(h)))
+                        hp.add(h);
+                });
+            }}
+
+        // Définissez les en-têtes de la requête
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        // Créez le corps de la requête
+
+
+        Recommend2 myData = new Recommend2(getRating(), hp);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Article> l=new ArrayList<>();
+
+        try {
+            String json = mapper.writeValueAsString(myData);
+
+            // Créez l'objet HttpEntity avec les en-têtes et le corps de la requête
+            HttpEntity<String> httpEntity = new HttpEntity<>(json, headers);
+
+            // Envoyez la requête POST et obtenez la réponse
+            ResponseEntity<String> response = restTemplate.exchange("http://127.0.0.1:8000/recommend",
+                    HttpMethod.POST, httpEntity, String.class);
+            // Traitez la réponse
+
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            ResponceBody2 responseObj = objectMapper.readValue(responseBody, ResponceBody2.class);
+
+            List<Article> l2=articleRepository.findAll();
+            for(String r:responseObj.getRecommendedProducts() ){
+                System.out.println(r);
+
+            }
+            System.out.println(responseObj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
+        return l;
+    }
 
 
 }

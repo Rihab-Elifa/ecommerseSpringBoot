@@ -17,12 +17,16 @@ public class Rating {
     @Id
     private String id;
     private int NumR;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "u_id")
-    private User u;
 
-    public Rating(int numR, User u) {
-        NumR = numR;
+    private String u;
+
+    private String a;
+
+
+    public Rating(int numR,String u, String a) {
+        this.NumR = numR;
         this.u = u;
+        this.a=a;
     }
+
 }

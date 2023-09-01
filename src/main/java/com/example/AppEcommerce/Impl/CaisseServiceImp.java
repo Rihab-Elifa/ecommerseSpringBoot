@@ -44,8 +44,10 @@ public interface CaisseServiceImp {
     //reset sous admin
     void Reset(String id);
 
+
+
     //update etat
-    void UpdateSolde(String id);
+    void etat(String id);
 
     //today sales
     int todaysales();

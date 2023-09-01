@@ -24,10 +24,10 @@ public class RatingService implements RatingServiceImp {
     @Autowired
     ArticleRepository articleRepository;
     @Override
-    public String addRating(String idU, String idA, RatingDto ratingDto) {
-        User u =userRepository.findById(idU).orElseThrow();
+    public String addRating(String idU, String idA, int ratingDto) {
+
         Article a =articleRepository.findById(idA).orElseThrow();
-        Rating r=new Rating(ratingDto.getNumR(),u);
+        Rating r=new Rating(ratingDto,idU,idA);
         ratingRepository.save(r);
         a.getRating().add(r);
         articleRepository.save(a);
