@@ -6,10 +6,7 @@ import com.example.AppEcommerce.Dto.CategDto;
 import com.example.AppEcommerce.Dto.MessageResponse;
 import com.example.AppEcommerce.Enum.Activity;
 import com.example.AppEcommerce.Impl.ArticleServiceImpl;
-import com.example.AppEcommerce.Model.Article;
-import com.example.AppEcommerce.Model.Categorie;
-import com.example.AppEcommerce.Model.File;
-import com.example.AppEcommerce.Model.PageVendor;
+import com.example.AppEcommerce.Model.*;
 import com.example.AppEcommerce.Repository.ArticleRepository;
 import com.example.AppEcommerce.Repository.CategoryRepository;
 import com.example.AppEcommerce.Repository.FileRepository;
@@ -186,6 +183,24 @@ public class ArticleService  implements ArticleServiceImpl {
         Categorie article1 = categoryRepository.save(cat);
         return article1.getId();
     }
+//***************************************************************calcul moyenne de rating
+@Override
+public ResponseEntity<Double> calculeMoyRating(String idArt) {
+        Article a=articleRepository.findById(idArt).orElseThrow();
+
+       int x=0;
+       for(Rating rr:a.getRating()) {
+           x += rr.getNumR();
+       }
+
+    if (a.getRating().size() == 0) {
+
+        return ResponseEntity.ok(0.0);
+    } else {
+        double moyenne = (double) x / a.getRating().size();
+        return ResponseEntity.ok(moyenne);
+    }
+}
 
 
 }

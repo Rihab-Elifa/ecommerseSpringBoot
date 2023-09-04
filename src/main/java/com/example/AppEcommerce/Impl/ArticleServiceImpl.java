@@ -42,4 +42,7 @@ public interface ArticleServiceImpl {
     List<Article> find(String i);
 
     String  addArticle(CategDto categDto, MultipartFile image) throws IOException;
+
+    //***************************************************************calcul moyenne de rating
+    ResponseEntity<Double> calculeMoyRating(String idArt);
 }

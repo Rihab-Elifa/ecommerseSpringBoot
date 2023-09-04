@@ -99,11 +99,35 @@ public class ArticleController {
     //********************Rating user for article********
 
     @PostMapping(value="/addRating/{idU}/{idA}")
-    public String Rating(@PathVariable String idU,@PathVariable String idA,@RequestBody int ratingDto){
+    public ResponseEntity<?> Rating(@PathVariable String idU,@PathVariable String idA,@RequestBody int ratingDto){
         return ratingService.addRating(idU,idA,ratingDto);
 
 
     }
+
+    @DeleteMapping(value = "/delRating/{id}")
+    public void delRat(@PathVariable String id) {
+        ratingService.deleteRat(id);
+    }
+    /*************************************** get moyenn rating for article*/
+    @GetMapping(value="/moyRating/{idU}")
+    public ResponseEntity<Double> moyRating(@PathVariable String idU){
+        return articleService.calculeMoyRating(idU);
+
+
+    }
+    //etatRating
+    @GetMapping(value="/EtatRating/{idU}/{idA}")
+    public boolean etatttt(@PathVariable String idU,@PathVariable String idA){
+        return ratingService.ExistRat2(idU,idA);
+    }
+    ///getrating
+    @GetMapping("/getReat/{idU}/{idA}")
+    public int getReatby(@PathVariable String idU,@PathVariable String idA){
+        return ratingService.getR(idU,idA);
+    }
+
+
     @GetMapping(value="/somme/{idA}")
     public double somme(@PathVariable String idA){
         return articleService.moyenneRating(idA);
@@ -160,6 +184,7 @@ public class ArticleController {
 
     }
 
+
     //get List article recommend by user
     @GetMapping(value = "/ArticleRecommend/{id}")//on change id de userpurchase par id du user directement pour chercher le historique
   public   List<Article> getArticleRecommend(@PathVariable String id){
@@ -169,13 +194,13 @@ public class ArticleController {
      List<Commander> lc=caisseService.caisseListClient(id);
      List<History> historique=new ArrayList<>();
      for(Commander c :lc){
-         if(c.getStatus()== Status.DELIVERED){
+
          c.getArticles().forEach(aa->{
              History h =new History(aa.getId());
           if(!(historique.contains(h)))
              historique.add(h);
          });
-     }}
+     }
 
      // Définissez les en-têtes de la requête
      HttpHeaders headers = new HttpHeaders();
@@ -272,6 +297,12 @@ public class ArticleController {
             List<Article> l2=articleRepository.findAll();
             for(String r:responseObj.getRecommendedProducts() ){
                 System.out.println(r);
+                for(Article ar:l2){
+                    if (ar.getId().equals(r)){
+                        l.add(ar);
+                        System.out.println(ar.getNom());
+                    }
+                }
 
             }
             System.out.println(responseObj);
